@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Ancestry Filtering</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link rel="stylesheet" type="text/css" href="reset.css">
+	<script src="http://code.jquery.com/jquery.min.js"></script>
+	<script type="text/javascript" src="app.js"></script>
+</head>
+<body>
+	<div id="backgroundWrapper">
+		<div id = "instructions">Welcome to the ancestry database. Click on any attribute to see what subset of the database has that attribute
+		</div>
+		<div id="buttonWrapper">
+			<div class="button" id="male">Male</div>
+			<div class="button" id="female">Female</div>
+			<div class="button" id="motherKnown">Mother Known</div>
+			<div class="button" id="fatherKnown">Father Known</div>
+			<div class="button" id="BornAfter1800">Born >1800</div>
+			<div class="button" id="BornAfter1600">Born >1600</div>
+			<div class="button" id="Haverbeke">Haverbeke</div>
+			<div class="button" id="ageOver70">Age >70</div>
+		</div>
+		<div class = "bar" id="largeBar">
+			<div class = "bar" id ="smallBar">
+				<span id = "percent2">0</span>%
+			</div>
+		</div>
+		<div id="nameColumn"></div>
+	</div>
+</body>
+</html>
