@@ -6,7 +6,11 @@ var ancestry = JSON.parse(ANCESTRY_FILE);
 //Defines ancestryCount as the number of people in dataset
 var ancestryCount = ancestry.length;
 
-//Defines myEach as a function to perform a function on each value in the array
+//Initializes variables currentArr and currentPercent
+var currentArr = [];
+var currentPercent;
+
+//Defines myEach to perform a function on each value in the array
 function myEach(arr,f){
   for(var i = 0; i<arr.length;i++){
     f(arr[i]);
@@ -50,19 +54,36 @@ function ageOver70(x){
   return x.died - x.born >= 70;
 }
 
-//Lists out names for people in current Array with dash before each name and a break to separate the names
+//Lists out names for people in current Array with dash before each name and a break to separate the names. Additionally, add a total of the subset at the end.
 function listNames(arr){
   if(arr.length < 1){
     return null;
   }
-  var newArr = ["- ",arr[0].name];
-  for(var i = 1;i<arr.length;i++){
-    if(arr[i] !== undefined){newArr.push("<br> - " + arr[i].name);}
-  }
+  var newArr = [];
+  myEach(arr,function(x){
+    if(x !== undefined){
+      newArr.push("- " + x.name + "<br>");
+    }
+  });
+  newArr.push("<br>subset="+arr.length);
   return newArr.join("");
 }
 
-//Adds names to name column. Calculates percent that subset represetns and then updates percent. Changes height and margin of bars to represent correct portion.
+//When a button is clicked, it empties the percent and name column, changes current button to blue, resets rest of buttons to black and shows bars
+$(".button").click(function(){
+  $("#percent2").empty();
+  $("#nameColumn").empty();
+  $("#totalNum").empty();
+  $(".button").css("background-color","black");
+  $(this).css("background-color","#000099");
+  $("#smallBar").fadeIn(1000);
+  $("#largeBar").show();
+  $("#nameColumn").show();
+  $("#totalNum").append(ancestryCount);
+  $("#total").show();
+});
+
+//Adds names to name column. Calculates percent that subset represents and then updates percent. Changes height and margin of bars to represent correct portion.
 function updateCurrent(){
   $("#nameColumn").html(listNames(currentArr));
   currentPercent = Math.round(currentArr.length / ancestry.length * 100);
@@ -70,21 +91,6 @@ function updateCurrent(){
   $("#smallBar").css("margin-top",(1 - (currentPercent/100))*400 + "px");
   $("#smallBar").css("height",(currentPercent/100) * 400+"px");
 }
-
-//Initializes variables currentArr and currentPercent
-var currentArr = [];
-var currentPercent;
-
-//When a button is clicked, it empties the percent and name column, changes current button to blue, resets rest of buttons to black and shows bars
-$(".button").click(function(){
-  $("#percent2").empty();
-  $("#nameColumn").empty();
-  $(".button").css("background-color","black");
-  $(this).css("background-color","#000099");
-  $("#smallBar").fadeIn(1000);
-  $("#largeBar").show();
-  $("#nameColumn").show();
-});
 
 //filters currentArr based on button clicked and runs update current function
 $("#male").click(function(){
