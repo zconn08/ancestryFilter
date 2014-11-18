@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-//Parse Ancestry data to usable format
+//Parse ANCESTRY_FILE data to usable format
 var ancestry = JSON.parse(ANCESTRY_FILE);
 
 //Defines ancestryCount as the number of people in dataset
@@ -54,21 +54,6 @@ function ageOver70(x){
   return x.died - x.born >= 70;
 }
 
-//Lists out names for people in current Array with dash before each name and a break to separate the names. Additionally, add a total of the subset at the end.
-function listNames(arr){
-  if(arr.length < 1){
-    return null;
-  }
-  var newArr = [];
-  myEach(arr,function(x){
-    if(x !== undefined){
-      newArr.push("- " + x.name + "<br>");
-    }
-  });
-  newArr.push("<br>subset="+arr.length);
-  return newArr.join("");
-}
-
 //When a button is clicked, it empties the percent and name column, changes current button to blue, resets rest of buttons to black and shows bars
 $(".button").click(function(){
   $("#percent2").empty();
@@ -83,7 +68,22 @@ $(".button").click(function(){
   $("#total").show();
 });
 
-//Adds names to name column. Calculates percent that subset represents and then updates percent. Changes height and margin of bars to represent correct portion.
+//Defines listNames to list out names for people in current Array with dash before each name and a break to separate the names. Additionally, adds a total of the subset at the end.
+function listNames(arr){
+  if(arr.length < 1){
+    return null;
+  }
+  var newArr = [];
+  myEach(arr,function(x){
+    if(x !== undefined){
+      newArr.push("- " + x.name + "<br>");
+    }
+  });
+  newArr.push("<br>subset="+arr.length);
+  return newArr.join("");
+}
+
+//Defines updateCurrent to add names to name column. Calculates percent that subset represents and then updates percent. Changes height and margin of bars to represent correct portion.
 function updateCurrent(){
   $("#nameColumn").html(listNames(currentArr));
   currentPercent = Math.round(currentArr.length / ancestry.length * 100);
@@ -92,39 +92,24 @@ function updateCurrent(){
   $("#smallBar").css("height",(currentPercent/100) * 400+"px");
 }
 
-//filters currentArr based on button clicked and runs update current function
-$("#male").click(function(){
-  currentArr = myFilter(ancestry,isMale);
+//Defines respondToClick to filter currentArr based on button clicked and runs updateCurrent function
+function respondToClick(button,filter){
+  $(button).click(function(){
+  currentArr = myFilter(ancestry,filter);
   updateCurrent();
-});
-$("#female").click(function(){
-  currentArr = myFilter(ancestry,isFemale);
-  updateCurrent();
-});
-$("#motherKnown").click(function(){
-  currentArr = myFilter(ancestry,motherKnown);
-  updateCurrent();
-});
-$("#fatherKnown").click(function(){
-  currentArr = myFilter(ancestry,fatherKnown);
-  updateCurrent();
-});
-$("#BornAfter1800").click(function(){
-  currentArr = myFilter(ancestry,bornAfter1800);
-  updateCurrent();
-});
-$("#BornAfter1600").click(function(){
-  currentArr = myFilter(ancestry,bornAfter1600);
-  updateCurrent();
-});
-$("#Haverbeke").click(function(){
-  currentArr = myFilter(ancestry,haverbeke);
-  updateCurrent();
-});
-$("#ageOver70").click(function(){
-  currentArr = myFilter(ancestry,ageOver70);
-  updateCurrent();
-});
+  });
+}
+
+//Runs respondToClick function with relevant button ids and tests
+respondToClick("#male",isMale);
+respondToClick("#female",isFemale);
+respondToClick("#motherKnown",motherKnown);
+respondToClick("#fatherKnown",fatherKnown);
+respondToClick("#BornAfter1800",bornAfter1800);
+respondToClick("#BornAfter1600",bornAfter1600);
+respondToClick("#Haverbeke",haverbeke);
+respondToClick("#ageOver70",ageOver70);
+
 });
 
 //Ancestry data in JSON
